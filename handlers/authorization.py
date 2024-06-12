@@ -1,7 +1,9 @@
 from config import bot
 from telebot.types import Message
-from database.bd import authenticate_user
+from database.authorization import authenticate_user
 from keyboards.AuthoReg import gen_markup
+from keyboards.MainKeyboards import gen_markup_main
+from handlers.exit import handle_exit
 
 user_data = {}
 
@@ -34,7 +36,8 @@ def process_login_password(message: Message):
     if result is True:
         bot.send_message(
             message.from_user.id,
-            f"Авторизация прошла успешна"
+            f"Авторизация прошла успешна",
+            reply_markup=gen_markup_main()
 
         )
     else:

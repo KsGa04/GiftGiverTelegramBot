@@ -1,6 +1,8 @@
 from config import bot
 from telebot.types import Message
-from database.bd import register_user
+from database.registration import register_user
+from keyboards.AuthoReg import gen_markup
+from keyboards.MainKeyboards import gen_markup_main
 
 user_data = {}
 
@@ -58,3 +60,22 @@ def process_email(message: Message):
         message.from_user.id,
         reg_message
     )
+    if reg_message == "Пользователь с таким логином уже существует.":
+        bot.send_message(
+            message.from_user.id,
+            reg_message,
+            reply_markup=gen_markup()
+        )
+    elif reg_message == "Регистрация прошла успешно.":
+        bot.send_message(
+            message.from_user.id,
+            reg_message,
+            reply_markup=gen_markup_main()
+        )
+    else:
+        bot.send_message(
+            message.from_user.id,
+            reg_message,
+            reply_markup=gen_markup()
+        )
+
