@@ -1,10 +1,9 @@
 from config import bot
 from telebot.types import Message
 from database.registration import register_user
+from handlers.authorization import user_data
 from keyboards.AuthoReg import gen_markup
 from keyboards.MainKeyboards import gen_markup_main
-
-user_data = {}
 
 
 @bot.callback_query_handler(

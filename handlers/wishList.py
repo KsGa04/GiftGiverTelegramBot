@@ -1,14 +1,15 @@
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 
 from config import bot
 from database.bd import CurrentUser
 from database.wishList import get_user_wishlist, delete_from_wishlist
+from keyboards.MainKeyboards import gen_markup_main
 
 
 @bot.message_handler(func=lambda message: message.text == "Список желаемого📜")
 def handle_wish(message):
     wishlist = get_user_wishlist(CurrentUser.CurrentId)
-
+    bot.send_message(message.from_user.id, text="Вот ваш список желаемого", reply_markup=ReplyKeyboardRemove())
     if wishlist:
         for item in wishlist:
             name, price, link, item_id, image = item
@@ -29,8 +30,10 @@ def handle_wish(message):
                 bot.send_message(message.from_user.id,
                                  text=f'<a href="{link}" style="color:black;text-decoration:none;">{name} (Цена: {price_str})</a>',
                                  parse_mode='HTML', reply_markup=item_markup)
+        bot.send_message(message.from_user.id, text="Все товары выведены",
+                         reply_markup=gen_markup_main())
     else:
-        bot.send_message(message.from_user.id, text="Не удалось получить ваш список желаемого.")
+        bot.send_message(message.from_user.id, text="Не удалось получить ваш список желаемого.", reply_markup=gen_markup_main())
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("delete_item_"))

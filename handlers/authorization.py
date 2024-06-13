@@ -15,6 +15,7 @@ user_data = {}
     )
 )
 def author_answer(callback_query):
+    user_data.clear()
     # Удаляем клавиатуру.
     bot.edit_message_reply_markup(
         callback_query.from_user.id, callback_query.message.message_id
